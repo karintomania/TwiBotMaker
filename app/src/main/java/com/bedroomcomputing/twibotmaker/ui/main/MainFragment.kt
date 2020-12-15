@@ -11,10 +11,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bedroomcomputing.twibotmaker.R
 import com.bedroomcomputing.twibotmaker.databinding.MainFragmentBinding
 import com.bedroomcomputing.twibotmaker.db.TweetDatabase
+import com.bedroomcomputing.twibotmaker.ui.edit.EditFragmentDirections
 
 class MainFragment : Fragment() {
 
@@ -28,6 +32,7 @@ class MainFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
+
         // Inflate view and obtain an instance of the binding class
         binding = DataBindingUtil.inflate(
             inflater,
@@ -37,14 +42,16 @@ class MainFragment : Fragment() {
         )
 
 //        viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
-        viewModel = WordViewModelFactory(TweetDatabase.getDatabase(requireContext()).tweetDao()).create(MainViewModel::class.java)
+        viewModel = MainViewModelFactory(TweetDatabase.getDatabase(requireContext()).tweetDao()).create(MainViewModel::class.java)
 
         setSppiner()
         setRecyclerView()
 
-//        binding.buttonAdd.setOnClickListener(
-//
-//        )
+
+        binding.buttonAdd.setOnClickListener{
+            val action = MainFragmentDirections.actionMainFragmentToEditFragment(1)
+            findNavController().navigate(action)
+        }
 
         binding.mainViewModel = viewModel
 

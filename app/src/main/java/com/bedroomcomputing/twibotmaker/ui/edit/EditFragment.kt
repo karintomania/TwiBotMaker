@@ -33,7 +33,7 @@ class EditFragment : Fragment() {
             container,
             false
         )
-        viewModel = ViewModelProvider(this).get(EditViewModel::class.java)
+        viewModel = EditViewModelFactory(TweetDatabase.getDatabase(requireContext()).tweetDao()).create(EditViewModel::class.java)
 
 
         binding.editViewModel = viewModel
@@ -43,7 +43,6 @@ class EditFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(EditViewModel::class.java)
         // TODO: Use the ViewModel
     }
 
