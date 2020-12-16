@@ -8,10 +8,18 @@ import com.bedroomcomputing.twibotmaker.db.TweetDatabase
 import kotlinx.coroutines.launch
 
 class MainViewModel(val tweetDao: TweetDao) : ViewModel() {
-    // TODO: Implement the ViewModel
 //    val tweetDao = TweetDatabase.getDatabase(getApplication()).tweetDao()
     val tweetsList: LiveData<List<Tweet>> = tweetDao.getTweets()
 
+    fun onClickDelete(tweet:Tweet){
+        delete(tweet)
+    }
+
+    private fun delete(tweet:Tweet){
+        viewModelScope.launch{
+            tweetDao.delete(tweet.id)
+        }
+    }
 
 }
 

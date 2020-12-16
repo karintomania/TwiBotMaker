@@ -4,6 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
+            name="editClickListner"
+            type="com.bedroomcomputing.twibotmaker.ui.main.TweetListAdapter.EditClickListener" />
+        <variable
+            name="deleteClickListner"
+            type="com.bedroomcomputing.twibotmaker.ui.main.TweetListAdapter.DeleteClickListener" />
+        <variable
             name="tweet"
             type="com.bedroomcomputing.twibotmaker.db.Tweet" />
     </data>
@@ -38,6 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="EDIT"
+                android:onClick="@{()->editClickListner.onClick(tweet)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/button4" />
@@ -47,6 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="DELETE"
+                android:onClick="@{()->deleteClickListner.onClick(tweet)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>

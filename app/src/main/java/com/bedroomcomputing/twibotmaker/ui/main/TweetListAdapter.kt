@@ -1,19 +1,19 @@
 package com.bedroomcomputing.twibotmaker.ui.main
 
-import android.text.Layout
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bedroomcomputing.twibotmaker.R
-import com.bedroomcomputing.twibotmaker.databinding.MainFragmentBinding
 import com.bedroomcomputing.twibotmaker.databinding.TweetItemBinding
 import com.bedroomcomputing.twibotmaker.db.Tweet
 
-class TweetListAdapter : ListAdapter<Tweet, TweetListAdapter.TweetViewHolder>(TweetsComparator()) {
+class TweetListAdapter(
+    val editClickListener:EditClickListener,
+    val deleteClickListener:DeleteClickListener
+) : ListAdapter<Tweet, TweetListAdapter.TweetViewHolder>(TweetsComparator()) {
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TweetViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -25,11 +25,12 @@ class TweetListAdapter : ListAdapter<Tweet, TweetListAdapter.TweetViewHolder>(Tw
         val current = getItem(position)
 
         holder.binding.tweet = current
+        holder.binding.editClickListner = editClickListener
+        holder.binding.deleteClickListner = deleteClickListener
+
     }
 
     class TweetViewHolder(val binding: TweetItemBinding) : RecyclerView.ViewHolder(binding.root) {
-
-
     }
 
     class TweetsComparator : DiffUtil.ItemCallback<Tweet>() {
@@ -40,5 +41,12 @@ class TweetListAdapter : ListAdapter<Tweet, TweetListAdapter.TweetViewHolder>(Tw
         override fun areContentsTheSame(oldItem: Tweet, newItem: Tweet): Boolean {
             return oldItem.content == newItem.content
         }
+    }
+
+    class EditClickListener(val editClickListener: (tweet: Tweet) -> Unit) {
+        fun onClick(tweet: Tweet) = editClickListener(tweet)
+    }
+    class DeleteClickListener(val deleteClickListener: (tweet: Tweet) -> Unit) {
+        fun onClick(tweet: Tweet) = deleteClickListener(tweet)
     }
 }

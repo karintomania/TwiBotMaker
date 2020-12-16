@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.bedroomcomputing.twibotmaker.R
 import com.bedroomcomputing.twibotmaker.databinding.EditFragmentBinding
 import com.bedroomcomputing.twibotmaker.db.TweetDatabase
@@ -20,6 +22,7 @@ class EditFragment : Fragment() {
     }
     private lateinit var binding: EditFragmentBinding
     private lateinit var viewModel: EditViewModel
+    private val args: EditFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +36,14 @@ class EditFragment : Fragment() {
             container,
             false
         )
-        viewModel = EditViewModelFactory(TweetDatabase.getDatabase(requireContext()).tweetDao()).create(EditViewModel::class.java)
+        val database = TweetDatabase.getDatabase(requireContext()).tweetDao()
+        viewModel = EditViewModelFactory(database, args.tweet).create(EditViewModel::class.java)
+
+        binding.buttonAddContent.setOnClickListener{
+            viewModel.onClickAdd()
+            val action = EditFragmentDirections.actionEditFragmentToMainFragment()
+            findNavController().navigate(action)
+        }
 
 
         binding.editViewModel = viewModel

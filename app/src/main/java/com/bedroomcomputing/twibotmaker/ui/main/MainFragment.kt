@@ -2,6 +2,7 @@ package com.bedroomcomputing.twibotmaker.ui.main
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bedroomcomputing.twibotmaker.R
 import com.bedroomcomputing.twibotmaker.databinding.MainFragmentBinding
+import com.bedroomcomputing.twibotmaker.db.Tweet
 import com.bedroomcomputing.twibotmaker.db.TweetDatabase
 import com.bedroomcomputing.twibotmaker.ui.edit.EditFragmentDirections
 
@@ -49,7 +51,8 @@ class MainFragment : Fragment() {
 
 
         binding.buttonAdd.setOnClickListener{
-            val action = MainFragmentDirections.actionMainFragmentToEditFragment(1)
+            val tweet = Tweet()
+            val action = MainFragmentDirections.actionMainFragmentToEditFragment(tweet)
             findNavController().navigate(action)
         }
 
@@ -75,7 +78,18 @@ class MainFragment : Fragment() {
     private fun setRecyclerView(){
 
         val recyclerView = binding.recyclerview
-        val adapter = TweetListAdapter()
+
+        val deleteClickListener = TweetListAdapter.DeleteClickListener { tweet: Tweet ->
+            viewModel.onClickDelete(tweet)
+        }
+
+        val editClickListener = TweetListAdapter.EditClickListener { tweet: Tweet ->
+            val action = MainFragmentDirections.actionMainFragmentToEditFragment(tweet)
+            findNavController().navigate(action)
+
+        }
+
+        val adapter = TweetListAdapter(editClickListener, deleteClickListener)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
@@ -87,8 +101,6 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        // TODO: Use the ViewModel
     }
 
 }
