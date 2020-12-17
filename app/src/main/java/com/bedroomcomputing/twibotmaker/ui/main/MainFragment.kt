@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -20,7 +21,9 @@ import com.bedroomcomputing.twibotmaker.R
 import com.bedroomcomputing.twibotmaker.databinding.MainFragmentBinding
 import com.bedroomcomputing.twibotmaker.db.Tweet
 import com.bedroomcomputing.twibotmaker.db.TweetDatabase
+import com.bedroomcomputing.twibotmaker.db.UserDatabase
 import com.bedroomcomputing.twibotmaker.ui.edit.EditFragmentDirections
+import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : Fragment() {
 
@@ -44,7 +47,9 @@ class MainFragment : Fragment() {
         )
 
 //        viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
-        viewModel = MainViewModelFactory(TweetDatabase.getDatabase(requireContext()).tweetDao()).create(MainViewModel::class.java)
+        val tweetDao = TweetDatabase.getDatabase(requireContext()).tweetDao()
+        val userDao = UserDatabase.getDatabase(requireContext()).userDao()
+        viewModel = MainViewModelFactory(tweetDao, userDao).create(MainViewModel::class.java)
 
         setSppiner()
         setRecyclerView()
@@ -56,6 +61,14 @@ class MainFragment : Fragment() {
             findNavController().navigate(action)
         }
 
+        binding.buttonStart.setOnClickListener{
+            viewModel.onClickStart()
+        }
+
+        binding.buttonStop.setOnClickListener{
+            viewModel.onClickStop()
+        }
+
         binding.mainViewModel = viewModel
 
 
@@ -63,6 +76,11 @@ class MainFragment : Fragment() {
     }
 
     private fun setSppiner(){
+
+        val spinnerSelectedListner = SpinnerSelectedListenr{
+            viewModel.tweetSpanIndex.value = it
+        }
+
         ArrayAdapter.createFromResource(
             requireContext(),
             R.array.span_array,
@@ -72,6 +90,7 @@ class MainFragment : Fragment() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // Apply the adapter to the spinner
             binding.spinner.adapter = adapter
+            binding.spinner.onItemSelectedListener = spinnerSelectedListner
         }
     }
 
@@ -103,4 +122,13 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
     }
 
+}
+
+class SpinnerSelectedListenr(val onItemSelected: (position:Int) -> Unit): AdapterView.OnItemSelectedListener{
+    override fun onNothingSelected(p0: AdapterView<*>?) {
+    }
+
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+        onItemSelected(p2)
+    }
 }
