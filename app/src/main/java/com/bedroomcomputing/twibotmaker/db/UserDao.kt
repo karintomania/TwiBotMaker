@@ -11,6 +11,9 @@ interface UserDao {
     @Query("SELECT * FROM user ORDER BY id ASC")
     fun getUsers(): LiveData<List<User>>
 
+    @Query("SELECT * FROM user WHERE is_active = 1 ORDER BY id ASC")
+    fun getActiveUsers(): LiveData<List<User>>
+
     @Query("SELECT * FROM user WHERE id =:id")
     fun getUser(id: Int): LiveData<User>
 

@@ -5,10 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = arrayOf(Tweet::class), version = 1, exportSchema = false)
+@Database(entities = arrayOf(Tweet::class, User::class), version = 2, exportSchema = false)
 abstract class TweetDatabase : RoomDatabase() {
 
     abstract fun tweetDao(): TweetDao
+    abstract fun userDao(): UserDao
 
     companion object {
         @Volatile
@@ -20,7 +21,8 @@ abstract class TweetDatabase : RoomDatabase() {
                     context.applicationContext,
                     TweetDatabase::class.java,
                     "tweet_database"
-                ).build()
+                ).fallbackToDestructiveMigration()
+                .build()
                 INSTANCE = instance
                 // return instance
                 instance

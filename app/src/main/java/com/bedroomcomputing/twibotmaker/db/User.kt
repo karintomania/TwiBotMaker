@@ -12,5 +12,6 @@ class User (
     @ColumnInfo(name = "token") val token: String = "",
     @ColumnInfo(name = "token_secret") val tokenSecret: String = "",
     @ColumnInfo(name = "tweet_span") val tweetSpan: Int = 1,
-    @ColumnInfo(name = "is_running") val isRunning: Boolean = false
+    @ColumnInfo(name = "is_running") val isRunning: Boolean = false,
+    @ColumnInfo(name = "is_active") val isActive: Boolean = true
 )

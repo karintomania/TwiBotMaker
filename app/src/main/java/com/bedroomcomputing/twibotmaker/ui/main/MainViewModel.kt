@@ -4,10 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import androidx.work.*
-import com.bedroomcomputing.twibotmaker.db.Tweet
-import com.bedroomcomputing.twibotmaker.db.TweetDao
-import com.bedroomcomputing.twibotmaker.db.TweetDatabase
-import com.bedroomcomputing.twibotmaker.db.UserDao
+import com.bedroomcomputing.twibotmaker.db.*
 import com.bedroomcomputing.twibotmaker.work.TweetWorker
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -17,7 +14,11 @@ class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao) : ViewModel() 
     val tweetsList: LiveData<List<Tweet>> = tweetDao.getTweets()
     val tweetSpanIndex = MutableLiveData<Int>()
     val isLoggedIn = MutableLiveData<Boolean>()
+    var user: User? = userDao.getUsers().value?.get(0)
 
+    init{
+        checkLogin()
+    }
 
     fun onClickDelete(tweet:Tweet){
         delete(tweet)
@@ -57,6 +58,10 @@ class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao) : ViewModel() 
         Log.i("stop", getSpanHour().toString())
         val workManager = WorkManager.getInstance()
         workManager.cancelUniqueWork("tweetWork")
+    }
+
+    private fun checkLogin(){
+        isLoggedIn.value = (user != null)
     }
 
 }
