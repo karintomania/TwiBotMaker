@@ -13,14 +13,18 @@ import java.util.concurrent.TimeUnit
 
 class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao) : ViewModel() {
 //    val tweetDao = TweetDatabase.getDatabase(getApplication()).tweetDao()
+
+    val tweetWorkName = "tweetWork"
+
     val tweetsList: LiveData<List<Tweet>> = tweetDao.getTweets()
     val tweetSpanIndex = MutableLiveData<Int>()
     val isLoggedIn = MutableLiveData<Boolean>()
+    val isRunning = MutableLiveData<Boolean>()
     lateinit var user:User
 
     init{
         isLoggedIn.value = true
-        checkLogin()
+        setUser()
     }
 
     fun onClickDelete(tweet:Tweet){
@@ -42,8 +46,13 @@ class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao) : ViewModel() 
             .setConstraints(constraints)
             .build()
 
+        workManager.enqueueUniquePeriodicWork(tweetWorkName,ExistingPeriodicWorkPolicy.KEEP,tweetRequest)
 
-        workManager.enqueueUniquePeriodicWork("tweetWork",ExistingPeriodicWorkPolicy.KEEP,tweetRequest)
+        // update user
+        isRunning.value = true
+        user.isRunning = true
+        user.tweetSpan = tweetSpanIndex.value?:1
+        updateUser(user)
 
     }
 
@@ -60,10 +69,16 @@ class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao) : ViewModel() 
     fun onClickStop(){
         Log.i("stop", getSpanHour().toString())
         val workManager = WorkManager.getInstance()
-        workManager.cancelUniqueWork("tweetWork")
+        workManager.cancelUniqueWork(tweetWorkName)
+
+
+        // update user
+        isRunning.value = false
+        user.isRunning = false
+        updateUser(user)
     }
 
-    private fun checkLogin(){
+    private fun setUser(){
         viewModelScope.launch {
             val users = withContext(Dispatchers.IO) {
                  userDao.getUsers()
@@ -71,6 +86,8 @@ class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao) : ViewModel() 
             if(users.count() > 0){
                 isLoggedIn.value = true
                 user = users.get(0)
+                isRunning.value = user.isRunning
+                tweetSpanIndex.value = user.tweetSpan
             }else{
                 isLoggedIn.value = false
             }
@@ -78,6 +95,18 @@ class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao) : ViewModel() 
 
             Log.i("Main", "${isLoggedIn.value}")
         }
+    }
+
+    fun onClickLogout() {
+        viewModelScope.launch {
+            userDao.delete(user.id)
+        }
+        setUser()
+    }
+
+
+    fun updateUser(user:User){
+        viewModelScope.launch { userDao.insert(user) }
     }
 
 }

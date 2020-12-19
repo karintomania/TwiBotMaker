@@ -1,5 +1,6 @@
 package com.bedroomcomputing.twibotmaker.ui.main
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -16,6 +18,7 @@ import com.bedroomcomputing.twibotmaker.R
 import com.bedroomcomputing.twibotmaker.databinding.MainFragmentBinding
 import com.bedroomcomputing.twibotmaker.db.Tweet
 import com.bedroomcomputing.twibotmaker.db.TweetDatabase
+import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : Fragment() {
 
@@ -54,6 +57,31 @@ class MainFragment : Fragment() {
             }
         })
 
+        viewModel.tweetSpanIndex.observe(viewLifecycleOwner, Observer {
+            binding.spinner.setSelection(it)
+        })
+
+
+        viewModel.isRunning.observe(viewLifecycleOwner, Observer {
+            if(it){
+                // disable
+                binding.buttonStart.isEnabled = false
+                binding.textViewLogout.visibility = TextView.GONE
+                binding.spinner.isEnabled = false
+
+                // enable
+                binding.buttonStop.isEnabled = true
+            }else{
+                binding.buttonStart.isEnabled = true
+                binding.textViewLogout.visibility = TextView.VISIBLE
+                binding.spinner.isEnabled = true
+
+                binding.buttonStop.isEnabled = false
+            }
+        })
+
+
+
         binding.buttonAdd.setOnClickListener{
             val tweet = Tweet()
             val action = MainFragmentDirections.actionMainFragmentToEditFragment(tweet)
@@ -66,6 +94,10 @@ class MainFragment : Fragment() {
 
         binding.buttonStop.setOnClickListener{
             viewModel.onClickStop()
+        }
+
+        binding.textViewLogout.setOnClickListener{
+            viewModel.onClickLogout()
         }
 
         binding.mainViewModel = viewModel
@@ -91,6 +123,7 @@ class MainFragment : Fragment() {
             binding.spinner.adapter = adapter
             binding.spinner.onItemSelectedListener = spinnerSelectedListner
         }
+
     }
 
     private fun setRecyclerView(){

@@ -43,6 +43,16 @@ android:layout_height="match_parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_botInfoHead" />
 
+        <TextView
+            android:id="@+id/textView_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:text="Logout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_botInfoHead" />
+
         <Button
             android:id="@+id/button_start"
             android:layout_width="wrap_content"
@@ -51,8 +61,8 @@ android:layout_height="match_parent"
             android:text="START"
             app:layout_constraintEnd_toStartOf="@+id/button_stop"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView_botName"
-            app:layout_constraintTop_toBottomOf="@+id/textView_botInfoHead" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_botName" />
 
         <Button
             android:id="@+id/button_stop"
@@ -63,26 +73,26 @@ android:layout_height="match_parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/button_start"
-            app:layout_constraintTop_toBottomOf="@+id/textView_botInfoHead" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_botName" />
 
         <TextView
             android:id="@+id/textView_spanCaption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="24dp"
             android:text="つぶやく間隔"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_botName" />
+            app:layout_constraintTop_toBottomOf="@+id/button_start" />
 
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView_spanCaption"
-            app:layout_constraintTop_toBottomOf="@+id/textView_botName" />
+            app:layout_constraintTop_toBottomOf="@+id/button_start" />
 
         <TextView
             android:id="@+id/textView_tweetListHead"
