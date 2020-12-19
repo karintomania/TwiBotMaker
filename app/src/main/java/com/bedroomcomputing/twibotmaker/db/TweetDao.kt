@@ -8,8 +8,13 @@ import androidx.room.Query
 
 @Dao
 interface TweetDao {
-    @Query("SELECT * FROM tweet ORDER BY id ASC")
+    @Query("SELECT * FROM tweet")
     fun getTweets(): LiveData<List<Tweet>>
+
+    @Query("SELECT * FROM tweet")
+    fun getTweetsRow(): List<Tweet>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertTweets(vararg tweets: Tweet)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(tweet: Tweet)

@@ -9,7 +9,7 @@ import androidx.room.Query
 @Dao
 interface UserDao {
     @Query("SELECT * FROM user ORDER BY id ASC")
-    fun getUsers(): LiveData<List<User>>
+    fun getUsers(): List<User>
 
     @Query("SELECT * FROM user WHERE is_active = 1 ORDER BY id ASC")
     fun getActiveUsers(): LiveData<List<User>>

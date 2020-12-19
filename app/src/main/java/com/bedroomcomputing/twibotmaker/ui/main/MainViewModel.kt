@@ -6,7 +6,9 @@ import androidx.lifecycle.*
 import androidx.work.*
 import com.bedroomcomputing.twibotmaker.db.*
 import com.bedroomcomputing.twibotmaker.work.TweetWorker
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
 class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao) : ViewModel() {
@@ -14,9 +16,10 @@ class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao) : ViewModel() 
     val tweetsList: LiveData<List<Tweet>> = tweetDao.getTweets()
     val tweetSpanIndex = MutableLiveData<Int>()
     val isLoggedIn = MutableLiveData<Boolean>()
-    var user: User? = userDao.getUsers().value?.get(0)
+    lateinit var user:User
 
     init{
+        isLoggedIn.value = true
         checkLogin()
     }
 
@@ -61,7 +64,20 @@ class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao) : ViewModel() 
     }
 
     private fun checkLogin(){
-        isLoggedIn.value = (user != null)
+        viewModelScope.launch {
+            val users = withContext(Dispatchers.IO) {
+                 userDao.getUsers()
+            }
+            if(users.count() > 0){
+                isLoggedIn.value = true
+                user = users.get(0)
+            }else{
+                isLoggedIn.value = false
+            }
+
+
+            Log.i("Main", "${isLoggedIn.value}")
+        }
     }
 
 }
