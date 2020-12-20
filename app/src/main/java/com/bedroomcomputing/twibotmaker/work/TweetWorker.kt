@@ -37,7 +37,7 @@ class TweetWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, params) 
         if(content != "") {
             twitter.updateStatus(content)
         }
-        Log.i("TweetWorker", "TweetContent = ${content}")
+        Log.i(tag ,"TweetContent = ${content}")
         return Result.success()
     }
 

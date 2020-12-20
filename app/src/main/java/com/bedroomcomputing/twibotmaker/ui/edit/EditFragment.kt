@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -45,6 +46,9 @@ class EditFragment : Fragment() {
             findNavController().navigate(action)
         }
 
+        viewModel.tweetRestContentLength.observe(viewLifecycleOwner, Observer {
+            binding.textViewCountLetter.text = it
+        })
 
         binding.editViewModel = viewModel
 

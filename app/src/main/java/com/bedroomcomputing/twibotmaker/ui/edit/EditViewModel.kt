@@ -13,6 +13,9 @@ class EditViewModel(
     ) : ViewModel() {
 
     val tweetContent = MutableLiveData<String>()
+    val tweetRestContentLength = Transformations.map(tweetContent){
+        TweetContentCounter.countRestCharacter(it).toString()
+    }
 
     init {
         tweetContent.value = tweet.content
