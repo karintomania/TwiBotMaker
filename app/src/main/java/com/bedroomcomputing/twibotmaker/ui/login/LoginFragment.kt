@@ -85,7 +85,7 @@ class LoginFragment : Fragment() {
                 .setDebugEnabled(true)
                 .setOAuthConsumerKey(TwitterConst.CONSUMER_KEY)
                 .setOAuthConsumerSecret(TwitterConst.CONSUMER_SECRET)
-                .setIncludeEmailEnabled(true)
+                .setIncludeEmailEnabled(false)
             val config = builder.build()
             val factory = TwitterFactory(config)
             twitter = factory.instance
