@@ -152,15 +152,15 @@ class LoginFragment : Fragment() {
         suspend fun storeUserToken(accessToken: AccessToken) {
             val usr = withContext(Dispatchers.IO) { twitter.verifyCredentials() }
 
-            val userId = usr.id.toString()
-            val screenName = usr.screenName
+            val userId = usr.screenName
+            val name = usr.name
             val token = accessToken.token
             val tokenSecret = accessToken.tokenSecret
 
             Log.i("storeUserToken", token)
             Log.i("storeUserToken", tokenSecret)
 
-            val user = User(userId = userId, screenName = screenName, token = token, tokenSecret = tokenSecret)
+            val user = User(userId = userId, name = name, token = token, tokenSecret = tokenSecret)
             viewModel.user.value = user
             viewModel.saveUser(user)
         }

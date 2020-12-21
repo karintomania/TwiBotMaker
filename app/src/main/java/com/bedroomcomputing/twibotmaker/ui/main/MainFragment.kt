@@ -57,6 +57,9 @@ class MainFragment : Fragment() {
             }
         })
 
+        viewModel.botInfo.observe(viewLifecycleOwner, Observer {
+            binding.textViewBotName.text = it
+        })
         viewModel.tweetSpanIndex.observe(viewLifecycleOwner, Observer {
             binding.spinner.setSelection(it)
         })

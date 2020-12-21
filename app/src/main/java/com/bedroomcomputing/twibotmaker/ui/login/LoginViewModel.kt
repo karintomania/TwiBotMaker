@@ -15,7 +15,6 @@ class LoginViewModel(val userDao: UserDao) : ViewModel() {
 
     fun saveUser(user: User){
         viewModelScope.launch {
-            Log.i("Login", "user:${user.screenName}")
             userDao.insert(user)
         }
     }

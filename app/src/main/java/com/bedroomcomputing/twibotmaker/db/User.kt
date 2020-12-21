@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 class User (
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "user_id") val userId: String = "",
-    @ColumnInfo(name = "screen_name") val screenName: String = "",
+    @ColumnInfo(name = "name") val name: String = "",
     @ColumnInfo(name = "token") val token: String = "",
     @ColumnInfo(name = "token_secret") val tokenSecret: String = "",
     @ColumnInfo(name = "tweet_span") var tweetSpan: Int = 1,

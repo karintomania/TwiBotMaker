@@ -47,7 +47,8 @@ class TweetWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, params) 
         if(tweets.count() == 0){
             return ""
         }else{
-            val rnd = (0..tweets.count()).random()
+            val maxIndex = (tweets.count()-1)
+            val rnd = (0..maxIndex).random()
             return tweets[rnd].content
         }
     }

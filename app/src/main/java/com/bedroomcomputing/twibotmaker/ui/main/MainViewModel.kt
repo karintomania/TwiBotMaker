@@ -20,6 +20,7 @@ class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao) : ViewModel() 
     val tweetSpanIndex = MutableLiveData<Int>()
     val isLoggedIn = MutableLiveData<Boolean>()
     val isRunning = MutableLiveData<Boolean>()
+    val botInfo = MutableLiveData<String>()
     lateinit var user:User
 
     init{
@@ -42,7 +43,7 @@ class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao) : ViewModel() 
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
-        val tweetRequest = PeriodicWorkRequestBuilder<TweetWorker>(getSpanHour(),TimeUnit.MINUTES)
+        val tweetRequest = PeriodicWorkRequestBuilder<TweetWorker>(15L,TimeUnit.MINUTES)
             .setConstraints(constraints)
             .build()
 
@@ -88,6 +89,7 @@ class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao) : ViewModel() 
                 user = users.get(0)
                 isRunning.value = user.isRunning
                 tweetSpanIndex.value = user.tweetSpan
+                botInfo.value = "${user.name}(@${user.userId})"
             }else{
                 isLoggedIn.value = false
             }
