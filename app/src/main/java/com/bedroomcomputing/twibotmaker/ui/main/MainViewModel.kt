@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
-class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao) : ViewModel() {
+class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao, val workManager: WorkManager) : ViewModel() {
 //    val tweetDao = TweetDatabase.getDatabase(getApplication()).tweetDao()
 
     val tweetWorkName = "tweetWork"
@@ -39,11 +39,11 @@ class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao) : ViewModel() 
     }
 
     fun onClickStart(){
-        val workManager = WorkManager.getInstance()
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
-        val tweetRequest = PeriodicWorkRequestBuilder<TweetWorker>(15L,TimeUnit.MINUTES)
+        val spanHour = getSpanHour()
+        val tweetRequest = PeriodicWorkRequestBuilder<TweetWorker>(spanHour,TimeUnit.HOURS, 30L, TimeUnit.MINUTES)
             .setConstraints(constraints)
             .build()
 
@@ -52,7 +52,7 @@ class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao) : ViewModel() 
         // update user
         isRunning.value = true
         user.isRunning = true
-        user.tweetSpan = tweetSpanIndex.value?:1
+        user.tweetSpan = tweetSpanIndex.value?:0
         updateUser(user)
 
     }
@@ -60,8 +60,8 @@ class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao) : ViewModel() 
     private fun getSpanHour():Long{
         val spanHour = when(tweetSpanIndex.value){
             0 -> 1L
-            1 -> 3L
-            2 -> 6L
+            1 -> 2L
+            2 -> 3L
             else -> 1L
         }
         return spanHour
@@ -69,7 +69,6 @@ class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao) : ViewModel() 
 
     fun onClickStop(){
         Log.i("stop", getSpanHour().toString())
-        val workManager = WorkManager.getInstance()
         workManager.cancelUniqueWork(tweetWorkName)
 
 
@@ -113,11 +112,11 @@ class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao) : ViewModel() 
 
 }
 
-class MainViewModelFactory(val tweetDao: TweetDao, val userDao: UserDao) : ViewModelProvider.Factory {
+class MainViewModelFactory(val tweetDao: TweetDao, val userDao: UserDao, val workManager: WorkManager) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return MainViewModel(tweetDao, userDao) as T
+            return MainViewModel(tweetDao, userDao, workManager) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

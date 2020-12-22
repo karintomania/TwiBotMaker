@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.WorkManager
 import com.bedroomcomputing.twibotmaker.R
 import com.bedroomcomputing.twibotmaker.databinding.MainFragmentBinding
 import com.bedroomcomputing.twibotmaker.db.Tweet
@@ -44,7 +45,8 @@ class MainFragment : Fragment() {
 //        viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
         val tweetDao = TweetDatabase.getDatabase(requireContext()).tweetDao()
         val userDao = TweetDatabase.getDatabase(requireContext()).userDao()
-        viewModel = MainViewModelFactory(tweetDao, userDao).create(MainViewModel::class.java)
+        val workManager = WorkManager.getInstance(requireActivity())
+        viewModel = MainViewModelFactory(tweetDao, userDao, workManager).create(MainViewModel::class.java)
 
         setSppiner()
         setRecyclerView()

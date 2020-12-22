@@ -12,7 +12,9 @@
         tools:layout="@layout/edit_fragment" >
         <action
             android:id="@+id/action_editFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="true" />
         <argument
             android:name="tweet"
             app:argType="com.bedroomcomputing.twibotmaker.db.Tweet" />
@@ -36,6 +38,8 @@
         tools:layout="@layout/login_fragment" >
         <action
             android:id="@+id/action_loginFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

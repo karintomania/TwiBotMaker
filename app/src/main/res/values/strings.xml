@@ -2,7 +2,7 @@
     <string name="app_name">TwiBotMaker</string>
     <string-array name="span_array">
         <item>1時間</item>
+        <item>2時間</item>
         <item>3時間</item>
-        <item>6時間</item>
     </string-array>
 </resources>
