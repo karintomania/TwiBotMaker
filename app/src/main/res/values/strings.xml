@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">TwiBotMaker</string>
+    <string name="tweet_too_long">ツイート内容が長すぎます。</string>
+    <string name="tweet_blank">ツイート内容を入力してください。</string>
+    <string name="login_caption">Bot用のアカウントに\nLOGINボタンからログインしてください。</string>
     <string-array name="span_array">
         <item>1時間</item>
         <item>2時間</item>

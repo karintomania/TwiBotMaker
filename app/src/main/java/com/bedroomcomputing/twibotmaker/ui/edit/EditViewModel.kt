@@ -1,7 +1,5 @@
 package com.bedroomcomputing.twibotmaker.ui.edit
 
-import android.app.Application
-import androidx.core.content.contentValuesOf
 import androidx.lifecycle.*
 import com.bedroomcomputing.twibotmaker.db.Tweet
 import com.bedroomcomputing.twibotmaker.db.TweetDao
@@ -17,13 +15,30 @@ class EditViewModel(
         TweetContentCounter.countRestCharacter(it).toString()
     }
 
+    val contentError = MutableLiveData<ContentError>()
+
+    enum class ContentError {
+        VALID, BLANK, TOO_LONG
+    }
+
     init {
         tweetContent.value = tweet.content
+        contentError.value = ContentError.VALID
+
     }
 
     fun onClickAdd(){
         tweet.content = tweetContent.value?:""
-        insert(tweet)
+
+        val restCharacter = TweetContentCounter.countRestCharacter(tweet.content)
+        if(restCharacter < 0){
+            contentError.value = ContentError.TOO_LONG
+        }else if(restCharacter == 280){
+            contentError.value = ContentError.BLANK
+        }else{
+            contentError.value = ContentError.VALID
+            insert(tweet)
+        }
     }
 
     private fun insert(tweet:Tweet){

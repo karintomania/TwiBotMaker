@@ -1,14 +1,13 @@
 package com.bedroomcomputing.twibotmaker.ui.edit
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bedroomcomputing.twibotmaker.R
@@ -42,12 +41,23 @@ class EditFragment : Fragment() {
 
         binding.buttonAddContent.setOnClickListener{
             viewModel.onClickAdd()
-            val action = EditFragmentDirections.actionEditFragmentToMainFragment()
-            findNavController().navigate(action)
+
+            if(viewModel.contentError.value == EditViewModel.ContentError.VALID) {
+                val action = EditFragmentDirections.actionEditFragmentToMainFragment()
+                findNavController().navigate(action)
+            }
         }
 
         viewModel.tweetRestContentLength.observe(viewLifecycleOwner, Observer {
             binding.textViewCountLetter.text = it
+        })
+
+        viewModel.contentError.observe(viewLifecycleOwner, Observer {
+            if(it == EditViewModel.ContentError.BLANK){
+                Toast.makeText(requireContext(), R.string.tweet_blank, Toast.LENGTH_SHORT).show()
+            }else if(it == EditViewModel.ContentError.TOO_LONG){
+                Toast.makeText(requireContext(), R.string.tweet_too_long, Toast.LENGTH_SHORT).show()
+            }
         })
 
         binding.editViewModel = viewModel
