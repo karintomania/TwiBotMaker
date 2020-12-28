@@ -27,73 +27,84 @@ android:layout_height="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="Bot"
+            android:text="Bot情報"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/imageView_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_botInfoHead" />
+
         <TextView
             android:id="@+id/textView_botName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:text="test太郎\n@test_tarou"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/imageView_icon"
             app:layout_constraintTop_toBottomOf="@+id/textView_botInfoHead" />
 
         <TextView
             android:id="@+id/textView_logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="4dp"
             android:text="Logout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_botInfoHead" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView_icon" />
 
         <Button
             android:id="@+id/button_start"
             style="@style/button"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:background="@drawable/button_rounded_blue"
             android:text="START"
             app:layout_constraintEnd_toStartOf="@+id/button_stop"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_botName" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_spanCaption" />
 
         <Button
             android:id="@+id/button_stop"
             style="@style/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:background="@drawable/button_rounded_red"
             android:text="STOP"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/button_start"
-            app:layout_constraintTop_toBottomOf="@+id/textView_botName" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_spanCaption" />
 
         <TextView
             android:id="@+id/textView_spanCaption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="32dp"
             android:text="つぶやく間隔"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_start" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_botName" />
 
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="32dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView_spanCaption"
-            app:layout_constraintTop_toBottomOf="@+id/button_start" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_botName" />
 
         <TextView
             android:id="@+id/textView_tweetListHead"
@@ -105,7 +116,7 @@ android:layout_height="match_parent"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_spanCaption" />
+            app:layout_constraintTop_toBottomOf="@+id/button_start" />
 
         <Button
             android:id="@+id/button_add"

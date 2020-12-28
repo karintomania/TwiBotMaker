@@ -68,7 +68,18 @@ class MainFragment : Fragment() {
         viewModel.tweetSpanIndex.observe(viewLifecycleOwner, Observer {
             binding.spinner.setSelection(it)
         })
+        viewModel.iconUrl.observe(viewLifecycleOwner, Observer {
+            Log.i("MainFragment", it)
+            val url = it.toString().replace("http","https")
+            val iv = binding.imageViewIcon
+            val picasso = Picasso.get()
+            picasso.setLoggingEnabled(true)
 
+            picasso.load(url)
+                .placeholder(R.drawable.default_icon)
+                .error(R.drawable.default_icon)
+                .into(iv)
+        })
 
         viewModel.isRunning.observe(viewLifecycleOwner, Observer {
             if(it){

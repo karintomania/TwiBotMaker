@@ -4,11 +4,15 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import androidx.work.*
+import com.bedroomcomputing.twibotmaker.TwitterConst
 import com.bedroomcomputing.twibotmaker.db.*
 import com.bedroomcomputing.twibotmaker.work.TweetWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import twitter4j.Twitter
+import twitter4j.TwitterFactory
+import twitter4j.conf.ConfigurationBuilder
 import java.util.concurrent.TimeUnit
 
 class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao, val workManager: WorkManager) : ViewModel() {
@@ -22,6 +26,8 @@ class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao, val workManage
     val isRunning = MutableLiveData<Boolean>()
     val botInfo = MutableLiveData<String>()
     lateinit var user:User
+    lateinit var twitter: Twitter
+    val iconUrl = MutableLiveData<String>()
 
     init{
         isLoggedIn.value = true
@@ -88,7 +94,11 @@ class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao, val workManage
                 user = users.get(0)
                 isRunning.value = user.isRunning
                 tweetSpanIndex.value = user.tweetSpan
-                botInfo.value = "${user.name}(@${user.userId})"
+                botInfo.value = "${user.name}\n@${user.userId}"
+
+                // get icon image
+                createTwitterInstance()
+                iconUrl.value = withContext(Dispatchers.IO){twitter.showUser(twitter.id).profileImageURL}
             }else{
                 isLoggedIn.value = false
             }
@@ -108,6 +118,23 @@ class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao, val workManage
 
     fun updateUser(user:User){
         viewModelScope.launch { userDao.insert(user) }
+    }
+
+    private fun createTwitterInstance(){
+        val userToken = user.token
+        val userTokenSecret = user.tokenSecret
+        val builder = ConfigurationBuilder()
+            .setDebugEnabled(true)
+            .setOAuthConsumerKey(TwitterConst.CONSUMER_KEY)
+            .setOAuthConsumerSecret(TwitterConst.CONSUMER_SECRET)
+            .setOAuthAccessToken(userToken)
+            .setOAuthAccessTokenSecret(userTokenSecret)
+            .setIncludeEmailEnabled(false)
+
+        val config = builder.build()
+        val factory = TwitterFactory(config)
+        twitter = factory.instance
+
     }
 
 }
