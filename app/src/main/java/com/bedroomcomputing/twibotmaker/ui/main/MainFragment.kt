@@ -73,8 +73,6 @@ class MainFragment : Fragment() {
             val url = it.toString().replace("http","https")
             val iv = binding.imageViewIcon
             val picasso = Picasso.get()
-            picasso.setLoggingEnabled(true)
-
             picasso.load(url)
                 .placeholder(R.drawable.default_icon)
                 .error(R.drawable.default_icon)
@@ -103,7 +101,7 @@ class MainFragment : Fragment() {
 
         binding.buttonAdd.setOnClickListener{
             val tweet = Tweet()
-            val action = MainFragmentDirections.actionMainFragmentToEditFragment(tweet)
+            val action = MainFragmentDirections.actionMainFragmentToEditFragment(tweet,viewModel.user)
             findNavController().navigate(action)
         }
 
@@ -182,7 +180,7 @@ class MainFragment : Fragment() {
         }
 
         val editClickListener = TweetListAdapter.EditClickListener { tweet: Tweet ->
-            val action = MainFragmentDirections.actionMainFragmentToEditFragment(tweet)
+            val action = MainFragmentDirections.actionMainFragmentToEditFragment(tweet, viewModel.user)
             findNavController().navigate(action)
 
         }

@@ -37,7 +37,7 @@ class EditFragment : Fragment() {
             false
         )
         val database = TweetDatabase.getDatabase(requireContext()).tweetDao()
-        viewModel = EditViewModelFactory(database, args.tweet).create(EditViewModel::class.java)
+        viewModel = EditViewModelFactory(database, args.tweet, args.user).create(EditViewModel::class.java)
 
         binding.buttonAddContent.setOnClickListener{
             viewModel.onClickAdd()

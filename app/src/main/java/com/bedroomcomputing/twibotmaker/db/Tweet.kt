@@ -10,5 +10,6 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "tweet")
 class Tweet(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @ColumnInfo(name = "user_id") var userId: String = "",
     @ColumnInfo(name = "content") var content: String = ""
 ): Parcelable

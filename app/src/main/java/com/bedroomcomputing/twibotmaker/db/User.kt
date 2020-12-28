@@ -1,9 +1,12 @@
 package com.bedroomcomputing.twibotmaker.db
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 @Entity(tableName = "user")
 class User (
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
@@ -14,4 +17,4 @@ class User (
     @ColumnInfo(name = "tweet_span") var tweetSpan: Int = 1,
     @ColumnInfo(name = "is_running") var isRunning: Boolean = false,
     @ColumnInfo(name = "is_active") var isActive: Boolean = true
-)
+): Parcelable

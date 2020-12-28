@@ -18,6 +18,9 @@
         <argument
             android:name="tweet"
             app:argType="com.bedroomcomputing.twibotmaker.db.Tweet" />
+        <argument
+            android:name="user"
+            app:argType="com.bedroomcomputing.twibotmaker.db.User" />
     </fragment>
     <fragment
         android:id="@+id/mainFragment"
