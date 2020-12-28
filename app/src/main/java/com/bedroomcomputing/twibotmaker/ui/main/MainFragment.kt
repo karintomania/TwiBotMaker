@@ -1,9 +1,9 @@
 package com.bedroomcomputing.twibotmaker.ui.main
 
-import android.opengl.Visibility
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +11,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +20,9 @@ import com.bedroomcomputing.twibotmaker.R
 import com.bedroomcomputing.twibotmaker.databinding.MainFragmentBinding
 import com.bedroomcomputing.twibotmaker.db.Tweet
 import com.bedroomcomputing.twibotmaker.db.TweetDatabase
-import kotlinx.android.synthetic.main.main_fragment.*
+import com.squareup.picasso.Picasso
+import java.nio.file.Files.delete
+
 
 class MainFragment : Fragment() {
 
@@ -93,8 +96,25 @@ class MainFragment : Fragment() {
             findNavController().navigate(action)
         }
 
+        // つぶやき数が少ない場合、ダイアログ表示
         binding.buttonStart.setOnClickListener{
-            viewModel.onClickStart()
+            if(viewModel.tweetsList.value?.count()!! < 20){
+                val alert = AlertDialog.Builder(requireContext())
+                alert.setTitle("リストの数が少なすぎます")
+                alert.setMessage(R.string.insufficient_tweet_list)
+                alert.setPositiveButton("開始",
+                    DialogInterface.OnClickListener { dialog, which -> //Yesボタンが押された時の処理
+                        viewModel.onClickStart()
+                    })
+                alert.setNegativeButton("キャンセル",
+                    DialogInterface.OnClickListener { dialog, which -> //Noボタンが押された時の処理
+                        return@OnClickListener
+                    })
+                alert.show()
+            }else{
+                viewModel.onClickStart()
+            }
+
         }
 
         binding.buttonStop.setOnClickListener{
@@ -136,7 +156,18 @@ class MainFragment : Fragment() {
         val recyclerView = binding.recyclerview
 
         val deleteClickListener = TweetListAdapter.DeleteClickListener { tweet: Tweet ->
-            viewModel.onClickDelete(tweet)
+            val alert = AlertDialog.Builder(requireContext())
+            alert.setTitle("Delete tweet")
+            alert.setMessage("${tweet.content.substring(0,12)}......\nこのツイートを削除しますか？")
+            alert.setPositiveButton("削除",
+                DialogInterface.OnClickListener { dialog, which -> //Yesボタンが押された時の処理
+                    viewModel.onClickDelete(tweet)
+                })
+            alert.setNegativeButton("キャンセル",
+                DialogInterface.OnClickListener { dialog, which -> //Noボタンが押された時の処理
+                    return@OnClickListener
+                })
+            alert.show()
         }
 
         val editClickListener = TweetListAdapter.EditClickListener { tweet: Tweet ->
