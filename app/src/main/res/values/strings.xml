@@ -2,8 +2,19 @@
     <string name="app_name">TwiBotMaker</string>
     <string name="tweet_too_long">ツイート内容が長すぎます。</string>
     <string name="tweet_blank">ツイート内容を入力してください。</string>
+    <string name="insufficient_tweet">20個程度のつぶやき内容を登録してからBotを始めることをおすすめします。\n\n※Twitterは同じ内容のつぶやきを短期間にすることを禁止しています。つぶやきリストの数が少ないままBotを始めると、正しく動作しないことがあります。</string>
+    <string name="insufficient_tweet_title">つぶやきが少なすぎます</string>
+    <string name="insufficient_tweet_okButton">開始</string>
+    <string name="insufficient_tweet_cancelButton">キャンセル</string>
+    <string name="delete_tweet_title">このツイートを削除しますか？</string>
+    <string name="delete_tweet_ok">削除</string>
+    <string name="delete_tweet_cancel">キャンセル</string>
     <string name="login_caption">Bot用のアカウントに\nLOGINボタンからログインしてください。</string>
-    <string name="insufficient_tweet_list">20個程度のつぶやき内容を登録してからBotを始めることをおすすめします。\n\n※Twitterは同じ内容のつぶやきを短期間にすることを禁止しています。つぶやきリストの数が少ないままBotを始めると、正しく動作しないことがあります。</string>
+    <string name="main_botInfoHeader">Bot情報</string>
+    <string name="main_logout"><u>Logout</u></string>
+    <string name="main_tweetSpan">つぶやく間隔</string>
+    <string name="main_tweetList">つぶやきリスト</string>
+    <string name="main_tweetListCaption">リストの中のつぶやきを\nランダムにつぶやきます。</string>
     <string-array name="span_array">
         <item>1時間</item>
         <item>2時間</item>

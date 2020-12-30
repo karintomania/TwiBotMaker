@@ -16,6 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-2164726777115826~7106652020"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

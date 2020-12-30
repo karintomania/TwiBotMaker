@@ -65,4 +65,8 @@ dependencies {
 
     // load image
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+    // admob
+    implementation 'com.google.android.gms:play-services-ads:19.6.0'
+
 }

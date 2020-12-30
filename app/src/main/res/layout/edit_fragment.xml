@@ -35,7 +35,7 @@
             android:ems="10"
             android:gravity="start|top"
             android:inputType="textMultiLine"
-            android:lines="10"
+            android:lines="5"
             android:text="@={editViewModel.tweetContent}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
