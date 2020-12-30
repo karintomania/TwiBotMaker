@@ -62,7 +62,6 @@ class MainFragment : Fragment() {
 
         viewModel.isLoggedIn.observe(viewLifecycleOwner, Observer {
             if(!it){
-                Log.i("Login", "Not Login")
                 val action = MainFragmentDirections.actionMainFragmentToLoginFragment()
                 findNavController().navigate(action)
             }
@@ -75,7 +74,6 @@ class MainFragment : Fragment() {
             binding.spinner.setSelection(it)
         })
         viewModel.iconUrl.observe(viewLifecycleOwner, Observer {
-            Log.i("MainFragment", it)
             val url = it.toString().replace("http","https")
             val iv = binding.imageViewIcon
             val picasso = Picasso.get()
@@ -127,7 +125,6 @@ class MainFragment : Fragment() {
                     })
                 alert.show()
             }else{
-                Log.i("MainFragment", "show ad")
                 mInterstitialAd.show()
                 viewModel.onClickStart()
             }

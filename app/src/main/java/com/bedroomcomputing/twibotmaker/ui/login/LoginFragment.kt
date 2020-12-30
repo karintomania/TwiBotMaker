@@ -64,9 +64,7 @@ class LoginFragment : Fragment() {
         }
 
         viewModel.user.observe(viewLifecycleOwner, Observer {
-            Log.i("LoginFragment", "user chnaged")
             it?.let{
-                Log.i("LoginFragment", "move")
                 val action = LoginFragmentDirections.actionLoginFragmentToMainFragment()
                 findNavController().navigate(action)
             }
@@ -125,7 +123,6 @@ class LoginFragment : Fragment() {
             request: WebResourceRequest?
         ): Boolean {
             if (request?.url.toString().startsWith(TwitterConst.CALLBACK_URL)) {
-                Log.d("Authorization URL: ", request?.url.toString())
                 handleUrl(request?.url.toString())
 
                 // Close the dialog after getting the oauth_verifier
@@ -157,8 +154,6 @@ class LoginFragment : Fragment() {
             val token = accessToken.token
             val tokenSecret = accessToken.tokenSecret
 
-            Log.i("storeUserToken", token)
-            Log.i("storeUserToken", tokenSecret)
 
             val user = User(userId = userId, name = name, token = token, tokenSecret = tokenSecret)
             viewModel.user.value = user

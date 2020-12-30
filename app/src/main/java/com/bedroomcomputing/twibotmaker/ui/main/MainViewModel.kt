@@ -74,7 +74,6 @@ class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao, val workManage
     }
 
     fun onClickStop(){
-        Log.i("stop", getSpanHour().toString())
         workManager.cancelUniqueWork(tweetWorkName)
 
 
@@ -104,7 +103,6 @@ class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao, val workManage
             }
 
 
-            Log.i("Main", "${isLoggedIn.value}")
         }
     }
 
