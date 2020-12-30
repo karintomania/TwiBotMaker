@@ -39,7 +39,8 @@ class MainFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         mInterstitialAd = InterstitialAd(requireContext())
-        mInterstitialAd.adUnitId = "ca-app-pub-3940256099942544/1033173712"
+        mInterstitialAd.adUnitId = "ca-app-pub-2164726777115826/4221468386"
+
         mInterstitialAd.loadAd(AdRequest.Builder().build())
 
         // Inflate view and obtain an instance of the binding class
