@@ -3,11 +3,9 @@ package com.bedroomcomputing.twibotmaker.ui.main
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -35,16 +33,18 @@ class MainFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Ads
+        mInterstitialAd = InterstitialAd(requireContext())
+        mInterstitialAd.adUnitId = "ca-app-pub-2164726777115826/4221468386"
+
+        mInterstitialAd.loadAd(AdRequest.Builder().build())
+
         // option
         setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        mInterstitialAd = InterstitialAd(requireContext())
-        mInterstitialAd.adUnitId = "ca-app-pub-2164726777115826/4221468386"
-
-        mInterstitialAd.loadAd(AdRequest.Builder().build())
 
         // Inflate view and obtain an instance of the binding class
         binding = DataBindingUtil.inflate(
@@ -54,7 +54,6 @@ class MainFragment : Fragment() {
             false
         )
 
-//        viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
         val tweetDao = TweetDatabase.getDatabase(requireContext()).tweetDao()
         val userDao = TweetDatabase.getDatabase(requireContext()).userDao()
         val workManager = WorkManager.getInstance(requireActivity())
@@ -77,33 +76,21 @@ class MainFragment : Fragment() {
             binding.spinner.setSelection(it)
         })
         viewModel.iconUrl.observe(viewLifecycleOwner, Observer {
-            val url = it.toString().replace("http","https")
-            val iv = binding.imageViewIcon
-            val picasso = Picasso.get()
-            picasso.load(url)
-                .placeholder(R.drawable.default_icon)
-                .error(R.drawable.default_icon)
-                .into(iv)
+            setUserIcon(it)
         })
 
         viewModel.isRunning.observe(viewLifecycleOwner, Observer {
-            if(it){
-                // disable
-                binding.buttonStart.isEnabled = false
-                binding.spinner.isEnabled = false
+            // when the bot is running, hide start btn and spinner
+            binding.buttonStart.isEnabled = !it
+            binding.spinner.isEnabled = !it
 
-                // enable
-                binding.buttonStop.isEnabled = true
-            }else{
-                binding.buttonStart.isEnabled = true
-                binding.spinner.isEnabled = true
-
-                binding.buttonStop.isEnabled = false
-            }
+            // when the bot is running, show stop btn
+            binding.buttonStop.isEnabled = it
         })
 
 
 
+        // move to edit fragment
         binding.buttonAdd.setOnClickListener{
             val tweet = Tweet()
             val action = MainFragmentDirections.actionMainFragmentToEditFragment(tweet,viewModel.user)
@@ -140,6 +127,16 @@ class MainFragment : Fragment() {
 
 
         return binding.root
+    }
+
+    private fun setUserIcon(iconUrl: String) {
+        val url = iconUrl.toString().replace("http", "https")
+        val iv = binding.imageViewIcon
+        val picasso = Picasso.get()
+        picasso.load(url)
+            .placeholder(R.drawable.default_icon)
+            .error(R.drawable.default_icon)
+            .into(iv)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
