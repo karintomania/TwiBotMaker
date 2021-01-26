@@ -4,9 +4,7 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
@@ -35,6 +33,11 @@ class MainFragment : Fragment() {
         fun newInstance() = MainFragment()
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // option
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -87,14 +90,12 @@ class MainFragment : Fragment() {
             if(it){
                 // disable
                 binding.buttonStart.isEnabled = false
-                binding.textViewLogout.visibility = TextView.GONE
                 binding.spinner.isEnabled = false
 
                 // enable
                 binding.buttonStop.isEnabled = true
             }else{
                 binding.buttonStart.isEnabled = true
-                binding.textViewLogout.visibility = TextView.VISIBLE
                 binding.spinner.isEnabled = true
 
                 binding.buttonStop.isEnabled = false
@@ -135,14 +136,28 @@ class MainFragment : Fragment() {
             viewModel.onClickStop()
         }
 
-        binding.textViewLogout.setOnClickListener{
-            viewModel.onClickLogout()
-        }
-
         binding.mainViewModel = viewModel
 
 
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu, menu);
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_logout -> {
+                viewModel.onClickLogout()
+                true
+            }
+            R.id.menu_spreadsheet -> {
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun setSppiner(){

@@ -16,6 +16,8 @@
     <string name="main_tweetSpan">つぶやく間隔</string>
     <string name="main_tweetList">つぶやきリスト</string>
     <string name="main_tweetListCaption">リストの中のつぶやきを\nランダムにつぶやきます。</string>
+    <string name="menu_logout">ログアウト</string>
+    <string name="menu_spreadsheet">Spreadsheet連携</string>
     <string-array name="span_array">
         <item>1時間</item>
         <item>2時間</item>

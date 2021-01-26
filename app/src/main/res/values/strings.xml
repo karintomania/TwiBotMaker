@@ -15,6 +15,8 @@
     <string name="main_tweetSpan">Tweet Span</string>
     <string name="main_tweetList">Tweet List</string>
     <string name="main_tweetListCaption">TwiBotMaker will pick a random tweet from Tweet List and tweet it.</string>
+    <string name="menu_logout">Logout</string>
+    <string name="menu_spreadsheet">Spreadsheet</string>
     <string-array name="span_array">
         <item>1 hour</item>
         <item>2 hours</item>
