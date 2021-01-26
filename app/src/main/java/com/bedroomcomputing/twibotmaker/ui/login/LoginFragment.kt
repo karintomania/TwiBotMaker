@@ -54,6 +54,8 @@ class LoginFragment : Fragment() {
             container,
             false
         )
+
+        // get viewModel
         val userDao = TweetDatabase.getDatabase(requireContext()).userDao()
         viewModel = LoginViewModelFactory(userDao).create(LoginViewModel::class.java)
 
@@ -139,26 +141,14 @@ class LoginFragment : Fragment() {
             val uri = Uri.parse(url)
             val oauthVerifier = uri.getQueryParameter("oauth_verifier") ?: ""
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-                val token = withContext(Dispatchers.IO) {
-                    twitter.getOAuthAccessToken(oauthVerifier)
+                withContext(Dispatchers.IO) {
+                 val token =    twitter.getOAuthAccessToken(oauthVerifier)
+                 val usr =  twitter.verifyCredentials()
+                 viewModel.storeUserToken(usr, token)
                 }
-                storeUserToken(token)
             }
         }
 
-        suspend fun storeUserToken(accessToken: AccessToken) {
-            val usr = withContext(Dispatchers.IO) { twitter.verifyCredentials() }
-
-            val userId = usr.screenName
-            val name = usr.name
-            val token = accessToken.token
-            val tokenSecret = accessToken.tokenSecret
-
-
-            val user = User(userId = userId, name = name, token = token, tokenSecret = tokenSecret)
-            viewModel.user.value = user
-            viewModel.saveUser(user)
-        }
 
     }
 }
