@@ -33,6 +33,9 @@
         <action
             android:id="@+id/action_mainFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_spreadsheetFragment"
+            app:destination="@id/spreadsheetFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -43,6 +46,16 @@
             android:id="@+id/action_loginFragment_to_mainFragment"
             app:destination="@id/mainFragment"
             app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/spreadsheetFragment"
+        android:name="com.bedroomcomputing.twibotmaker.ui.spreadsheet.SpreadsheetFragment"
+        android:label="spreadsheet_fragment"
+        tools:layout="@layout/spreadsheet_fragment" >
+        <action
+            android:id="@+id/action_spreadsheetFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
             app:popUpToInclusive="true" />
     </fragment>
 </navigation>

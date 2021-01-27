@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.ActionBar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.WorkManager
+import com.bedroomcomputing.twibotmaker.MainActivity
 import com.bedroomcomputing.twibotmaker.R
 import com.bedroomcomputing.twibotmaker.databinding.MainFragmentBinding
 import com.bedroomcomputing.twibotmaker.db.Tweet
@@ -151,6 +153,9 @@ class MainFragment : Fragment() {
                 true
             }
             R.id.menu_spreadsheet -> {
+
+                val action = MainFragmentDirections.actionMainFragmentToSpreadsheetFragment()
+                findNavController().navigate(action)
                 true
             }
             else -> super.onOptionsItemSelected(item)

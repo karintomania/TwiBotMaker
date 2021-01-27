@@ -43,6 +43,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:2.3.2"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     testImplementation 'junit:junit:4.12'
 
     implementation "androidx.room:room-runtime:$room_version"
@@ -67,5 +68,12 @@ dependencies {
 
     // admob
     implementation 'com.google.android.gms:play-services-ads:19.6.0'
+
+    //spreadsheet
+    implementation 'com.google.apis:google-api-services-sheets:v4-rev516-1.23.0'
+    implementation 'com.google.api-client:google-api-client-android:1.23.0'
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
+
+    implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
 
 }
