@@ -6,13 +6,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.ActionBar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.bedroomcomputing.twibotmaker.MainActivity
+import androidx.navigation.fragment.navArgs
+import androidx.work.WorkManager
 import com.bedroomcomputing.twibotmaker.R
 import com.bedroomcomputing.twibotmaker.databinding.SpreadsheetFragmentBinding
+import com.bedroomcomputing.twibotmaker.db.TweetDao
+import com.bedroomcomputing.twibotmaker.db.TweetDatabase
+import com.bedroomcomputing.twibotmaker.ui.edit.EditFragmentArgs
+import com.bedroomcomputing.twibotmaker.ui.main.MainViewModel
+import com.bedroomcomputing.twibotmaker.ui.main.MainViewModelFactory
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -33,6 +39,8 @@ class SpreadsheetFragment : Fragment() {
     private lateinit var viewModel: SpreadsheetViewModel
     private lateinit var binding: SpreadsheetFragmentBinding
     lateinit var mGoogleSignInClient: GoogleSignInClient
+    private val args: SpreadsheetFragmentArgs by navArgs()
+
 
     // サインイン用intentを識別するためのID。0であることに意味はない
     val RC_SIGN_IN = 0
@@ -61,7 +69,11 @@ class SpreadsheetFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this).get(SpreadsheetViewModel::class.java)
+
+        val tweetDao = TweetDatabase.getDatabase(requireContext()).tweetDao()
+        viewModel = SpreadsheetViewModelFactory(tweetDao, args.user).create(SpreadsheetViewModel::class.java)
+
+
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.spreadsheet_fragment,
@@ -111,3 +123,4 @@ class SpreadsheetFragment : Fragment() {
     }
 
 }
+

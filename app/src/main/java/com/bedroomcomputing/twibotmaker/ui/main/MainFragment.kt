@@ -154,7 +154,7 @@ class MainFragment : Fragment() {
             }
             R.id.menu_spreadsheet -> {
 
-                val action = MainFragmentDirections.actionMainFragmentToSpreadsheetFragment()
+                val action = MainFragmentDirections.actionMainFragmentToSpreadsheetFragment(viewModel.user)
                 findNavController().navigate(action)
                 true
             }

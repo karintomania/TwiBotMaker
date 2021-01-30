@@ -16,7 +16,6 @@ import twitter4j.conf.ConfigurationBuilder
 import java.util.concurrent.TimeUnit
 
 class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao, val workManager: WorkManager) : ViewModel() {
-//    val tweetDao = TweetDatabase.getDatabase(getApplication()).tweetDao()
 
     val tweetWorkName = "tweetWork"
 
