@@ -21,7 +21,7 @@ class SpreadsheetViewModel(val tweetDao: TweetDao, val user: User) : ViewModel()
 
 
 
-    fun export(){
+    fun backup(){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
                 write()
@@ -72,6 +72,10 @@ class SpreadsheetViewModel(val tweetDao: TweetDao, val user: User) : ViewModel()
         val values: List<List<Any>> = tweets.toList()
 
         return values
+    }
+
+    fun restore(){
+        Log.d("SpreaadsheetViewModel", "restore")
     }
 
 }

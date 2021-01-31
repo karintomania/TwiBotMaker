@@ -86,8 +86,12 @@ class SpreadsheetFragment : Fragment() {
             signIn()
         }
 
-        binding.buttonExport.setOnClickListener {
-            viewModel.export()
+        binding.buttonBackup.setOnClickListener {
+            viewModel.backup()
+        }
+
+        binding.buttonBackup.setOnClickListener {
+            viewModel.restore()
         }
         return binding.root
     }
