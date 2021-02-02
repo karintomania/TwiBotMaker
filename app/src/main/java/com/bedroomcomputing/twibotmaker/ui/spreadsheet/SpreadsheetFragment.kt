@@ -90,7 +90,7 @@ class SpreadsheetFragment : Fragment() {
             viewModel.backup()
         }
 
-        binding.buttonBackup.setOnClickListener {
+        binding.buttonRestore.setOnClickListener {
             viewModel.restore()
         }
         return binding.root

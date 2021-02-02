@@ -1,7 +1,6 @@
 package com.bedroomcomputing.twibotmaker.ui.spreadsheet
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -11,7 +10,10 @@ import com.bedroomcomputing.twibotmaker.db.User
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.sheets.v4.Sheets
-import com.google.api.services.sheets.v4.model.*
+import com.google.api.services.sheets.v4.model.ClearValuesRequest
+import com.google.api.services.sheets.v4.model.ClearValuesResponse
+import com.google.api.services.sheets.v4.model.UpdateValuesResponse
+import com.google.api.services.sheets.v4.model.ValueRange
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -20,6 +22,15 @@ import java.util.*
 class SpreadsheetViewModel(val tweetDao: TweetDao, val user: User) : ViewModel() {
 
 
+    val spreadsheetId = "1XoRcqhbAkhYB8zh_k4_VTh3_V6TrJLeTz9NfW5mTY_8"
+
+    val sheetsService = Sheets
+        .Builder(
+            AndroidHttp.newCompatibleTransport(),
+            JacksonFactory.getDefaultInstance(),
+            SpreadsheetFragment.credential)
+        .setApplicationName("TwiBotMaker")
+        .build()
 
     fun backup(){
         viewModelScope.launch {
@@ -30,15 +41,6 @@ class SpreadsheetViewModel(val tweetDao: TweetDao, val user: User) : ViewModel()
     }
 
     suspend fun write(){
-        val transport = AndroidHttp.newCompatibleTransport();
-        val factory = JacksonFactory.getDefaultInstance()
-        val sheetsService = Sheets
-            .Builder(
-                AndroidHttp.newCompatibleTransport(),
-                JacksonFactory.getDefaultInstance(),
-                SpreadsheetFragment.credential)
-            .setApplicationName("TwiBotMaker")
-            .build();
 
         val values: List<List<Any>> = createValuesToWrite()
         val body = ValueRange().setValues(values)
@@ -47,12 +49,12 @@ class SpreadsheetViewModel(val tweetDao: TweetDao, val user: User) : ViewModel()
         val clear: ClearValuesResponse =
             sheetsService.spreadsheets()
                 .values()
-                .clear("1XoRcqhbAkhYB8zh_k4_VTh3_V6TrJLeTz9NfW5mTY_8",range, ClearValuesRequest())
+                .clear(spreadsheetId,range, ClearValuesRequest())
                 .execute()
         val result: UpdateValuesResponse =
             sheetsService.spreadsheets()
                 .values()
-                .update("1XoRcqhbAkhYB8zh_k4_VTh3_V6TrJLeTz9NfW5mTY_8", range, body)
+                .update(spreadsheetId, range, body)
                 .setValueInputOption("RAW")
                 .execute()
 
@@ -75,7 +77,34 @@ class SpreadsheetViewModel(val tweetDao: TweetDao, val user: User) : ViewModel()
     }
 
     fun restore(){
+
         Log.d("SpreaadsheetViewModel", "restore")
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                getValueAndSaveTweet()
+            }
+        }
+    }
+
+    suspend fun getValueAndSaveTweet(){
+        val range = "${user.userId}!A:A"
+        val result: ValueRange = sheetsService.spreadsheets().values().get(spreadsheetId, range).execute()
+
+        val resultValue = result.getValues() as List<List<String>>
+        val tweets = mutableListOf<Tweet>()
+        val userId = user.userId
+
+        for(row in resultValue){
+            for(value in row){
+                Log.d("SpreaadsheetViewModel", value)
+                val tweet = Tweet(userId = userId, content = value)
+                tweets.add(tweet)
+            }
+        }
+
+        tweetDao.restore(userId, tweets.toList())
+
+
     }
 
 }
