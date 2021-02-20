@@ -59,7 +59,6 @@ class SpreadsheetFragment : Fragment() {
         // もし前回起動時にサインインしていたら、サインイン不要
         val account = GoogleSignIn.getLastSignedInAccount(requireContext())
         account?.let{
-            Log.i("Spreadsheet", "${account.displayName}")
             credential?.setSelectedAccount(account.account)
         }
 
@@ -117,7 +116,6 @@ class SpreadsheetFragment : Fragment() {
         try {
             val account = completedTask.getResult(ApiException::class.java)
 
-            Log.i("Spreadsheet", "${account?.displayName}")
             credential?.setSelectedAccount(account?.account)
 
         } catch (e: ApiException) {

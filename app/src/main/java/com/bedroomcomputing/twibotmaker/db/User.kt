@@ -16,5 +16,6 @@ class User (
     @ColumnInfo(name = "token_secret") val tokenSecret: String = "",
     @ColumnInfo(name = "tweet_span") var tweetSpan: Int = 1,
     @ColumnInfo(name = "is_running") var isRunning: Boolean = false,
-    @ColumnInfo(name = "is_active") var isActive: Boolean = true
+    @ColumnInfo(name = "is_active") var isActive: Boolean = true,
+    @ColumnInfo(name = "spreadsheet_id") var spreadsheetId: String = ""
 ): Parcelable
