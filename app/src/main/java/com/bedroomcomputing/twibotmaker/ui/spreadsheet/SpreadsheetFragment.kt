@@ -6,19 +6,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
-import androidx.work.WorkManager
 import com.bedroomcomputing.twibotmaker.R
 import com.bedroomcomputing.twibotmaker.databinding.SpreadsheetFragmentBinding
-import com.bedroomcomputing.twibotmaker.db.TweetDao
 import com.bedroomcomputing.twibotmaker.db.TweetDatabase
-import com.bedroomcomputing.twibotmaker.ui.edit.EditFragmentArgs
-import com.bedroomcomputing.twibotmaker.ui.main.MainViewModel
-import com.bedroomcomputing.twibotmaker.ui.main.MainViewModelFactory
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -56,11 +52,6 @@ class SpreadsheetFragment : Fragment() {
         mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
         credential = GoogleAccountCredential.usingOAuth2(requireContext(), Collections.singleton("https://www.googleapis.com/auth/spreadsheets"))
 
-        // もし前回起動時にサインインしていたら、サインイン不要
-        val account = GoogleSignIn.getLastSignedInAccount(requireContext())
-        account?.let{
-            credential?.setSelectedAccount(account.account)
-        }
 
     }
 
@@ -70,7 +61,8 @@ class SpreadsheetFragment : Fragment() {
     ): View? {
 
         val tweetDao = TweetDatabase.getDatabase(requireContext()).tweetDao()
-        viewModel = SpreadsheetViewModelFactory(tweetDao, args.user).create(SpreadsheetViewModel::class.java)
+        val userDao = TweetDatabase.getDatabase(requireContext()).userDao()
+        viewModel = SpreadsheetViewModelFactory(tweetDao, userDao, args.user).create(SpreadsheetViewModel::class.java)
 
 
         binding = DataBindingUtil.inflate(
@@ -80,16 +72,54 @@ class SpreadsheetFragment : Fragment() {
             false
         )
 
-        // sign in button
+        // もし前回起動時にサインインしていたら、サインイン不要
+        val account = GoogleSignIn.getLastSignedInAccount(requireContext())
+        if(account != null){
+            credential?.setSelectedAccount(account.account)
+            // hide signin view
+            binding.spreadsheetSigninLayout.visibility = View.GONE
+        }else{
+            binding.spreadsheetMainLayout.visibility = View.GONE
+        }
+
+        // URLがセットされていたら表示
+        if(viewModel.user.spreadsheetId != ""){
+            // set spreadsheet URL
+            binding.editUrl.setText(generateUrlFromSpreadsheetId(viewModel.user.spreadsheetId))
+        }
+
+        viewModel.errorMessage.observe(viewLifecycleOwner, Observer{
+            if(!it.isBlank()){
+                showErrorToast(it)
+                viewModel.errorMessage.value = ""
+            }
+        })
+
+
+        // sign in button on click
         binding.buttonSignin.setOnClickListener {
             signIn()
         }
 
+        // sign out button on click
+        binding.buttonSignout.setOnClickListener {
+            mGoogleSignInClient.signOut().addOnCompleteListener {
+                binding.spreadsheetSigninLayout.visibility = View.VISIBLE
+                binding.spreadsheetMainLayout.visibility = View.GONE
+
+            }
+        }
+
         binding.buttonBackup.setOnClickListener {
+            // overwrite spreadsheet id
+            viewModel.spreadsheetId = extractSpreadsheetIdFromUrl(binding.editUrl.text.toString())
+            // backup
             viewModel.backup()
         }
 
         binding.buttonRestore.setOnClickListener {
+            // overwrite spreadsheet id
+            viewModel.spreadsheetId = extractSpreadsheetIdFromUrl(binding.editUrl.text.toString())
             viewModel.restore()
         }
         return binding.root
@@ -117,12 +147,34 @@ class SpreadsheetFragment : Fragment() {
             val account = completedTask.getResult(ApiException::class.java)
 
             credential?.setSelectedAccount(account?.account)
+            //change visibility of layouts
+            binding.spreadsheetSigninLayout.visibility = View.GONE
+            binding.spreadsheetMainLayout.visibility = View.VISIBLE
 
         } catch (e: ApiException) {
             Log.w("Spreadsheet", "signInResult:failed code=" + e.statusCode)
 
         }
     }
+
+    private fun showErrorToast(msg:String){
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+    }
+
+    fun extractSpreadsheetIdFromUrl(url:String):String{
+        val regex = Regex("""spreadsheets\/d\/([^\/]+)""")
+
+        val match = regex.find(url)
+
+        val id = match?.groups?.get(1)?.value
+
+        return id?:""
+    }
+
+    fun generateUrlFromSpreadsheetId(spreadsheetId:String):String{
+        return "https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit"
+    }
+
 
 }
 
