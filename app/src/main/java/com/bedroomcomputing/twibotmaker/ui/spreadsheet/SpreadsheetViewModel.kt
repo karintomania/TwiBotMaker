@@ -25,8 +25,9 @@ class SpreadsheetViewModel(val tweetDao: TweetDao, val userDao: UserDao, val use
 //    var spreadsheetId = "1XoRcqhbAkhYB8zh_k4_VTh3_V6TrJLeTz9NfW5mTY_8"
     var spreadsheetId = user.spreadsheetId
     val sheetName = user.userId
-    val errorMessage = MutableLiveData<String>()
-
+    val isError = MutableLiveData<Boolean>()
+    val isSuccess = MutableLiveData<Boolean>()
+    val tag = "SpreaadsheetViewModel"
     val sheetsService = Sheets
         .Builder(
             AndroidHttp.newCompatibleTransport(),
@@ -35,20 +36,22 @@ class SpreadsheetViewModel(val tweetDao: TweetDao, val userDao: UserDao, val use
         .setApplicationName("TwiBotMaker")
         .build()
 
+
     //------- backup -------
 
     fun backup(){
 
-        var msg:String? = null
         viewModelScope.launch {
             try{
                 withContext(Dispatchers.IO){
                     updateUserUrl()
                     write()
                 }
+
+                isSuccess.value = true
             }catch(e:Exception){
-                msg = e.message
-                errorMessage.value = "something wrong with url!!"
+                Log.e(tag, e.printStackTrace().toString())
+                isError.value = true
             }
         }
 
@@ -89,7 +92,6 @@ class SpreadsheetViewModel(val tweetDao: TweetDao, val userDao: UserDao, val use
 
         var existsSheet = false
         for(sheet in sheets){
-            Log.d("SpreaadsheetViewModel", sheet.properties.title)
            if(sheet.properties.title == sheetName)
                existsSheet = true
         }
@@ -107,7 +109,6 @@ class SpreadsheetViewModel(val tweetDao: TweetDao, val userDao: UserDao, val use
             BatchUpdateSpreadsheetRequest()
                 .setRequests(listOf(request))
 
-        Log.i("Spreadsheet", "createSheet")
         sheetsService.spreadsheets()
             .batchUpdate(spreadsheetId,requestBody)
             .execute()
@@ -117,10 +118,8 @@ class SpreadsheetViewModel(val tweetDao: TweetDao, val userDao: UserDao, val use
     suspend fun createValuesToWrite(): List<List<Any>>{
 
         val tweetsList = tweetDao.getTweetsRow()
-        Log.i("Spreadsheet", "createValuesToWrite")
         val tweets = mutableListOf<List<Any>>()
         for(tweet in tweetsList){
-            Log.i("Spreadsheet", tweet.content)
             val row = Arrays.asList(tweet.content)
             tweets.add(row)
         }
@@ -134,11 +133,17 @@ class SpreadsheetViewModel(val tweetDao: TweetDao, val userDao: UserDao, val use
 
     fun restore(){
 
-        Log.d("SpreaadsheetViewModel", "restore")
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                updateUserUrl()
-                getValueAndSaveTweet()
+            try{
+                withContext(Dispatchers.IO){
+                    updateUserUrl()
+                    getValueAndSaveTweet()
+                }
+
+                isSuccess.value = true
+            }catch(e:Exception){
+                Log.e(tag, e.printStackTrace().toString())
+                isError.value = true
             }
         }
     }
@@ -153,14 +158,12 @@ class SpreadsheetViewModel(val tweetDao: TweetDao, val userDao: UserDao, val use
 
         for(row in resultValue){
             for(value in row){
-                Log.d("SpreaadsheetViewModel", value)
                 val tweet = Tweet(userId = userId, content = value)
                 tweets.add(tweet)
             }
         }
 
         tweetDao.restore(userId, tweets.toList())
-
 
     }
 

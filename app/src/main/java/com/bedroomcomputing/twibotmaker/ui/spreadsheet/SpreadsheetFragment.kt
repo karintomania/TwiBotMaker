@@ -88,13 +88,21 @@ class SpreadsheetFragment : Fragment() {
             binding.editUrl.setText(generateUrlFromSpreadsheetId(viewModel.user.spreadsheetId))
         }
 
-        viewModel.errorMessage.observe(viewLifecycleOwner, Observer{
-            if(!it.isBlank()){
-                showErrorToast(it)
-                viewModel.errorMessage.value = ""
+        // show error message
+        viewModel.isError.observe(viewLifecycleOwner, Observer{
+            if(it){
+                showErrorToast("something wrong")
+                viewModel.isError.value = false
             }
         })
 
+        // show success message
+        viewModel.isSuccess.observe(viewLifecycleOwner, Observer{
+            if(it){
+                showErrorToast("Success!")
+                viewModel.isSuccess.value = false
+            }
+        })
 
         // sign in button on click
         binding.buttonSignin.setOnClickListener {
