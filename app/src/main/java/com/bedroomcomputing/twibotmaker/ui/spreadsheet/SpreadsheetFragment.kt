@@ -15,10 +15,12 @@ import androidx.navigation.fragment.navArgs
 import com.bedroomcomputing.twibotmaker.R
 import com.bedroomcomputing.twibotmaker.databinding.SpreadsheetFragmentBinding
 import com.bedroomcomputing.twibotmaker.db.TweetDatabase
+import com.bedroomcomputing.twibotmaker.ui.login.ConnectionErrorFragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.ErrorDialogFragment
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.Task
@@ -91,7 +93,8 @@ class SpreadsheetFragment : Fragment() {
         // show error message
         viewModel.isError.observe(viewLifecycleOwner, Observer{
             if(it){
-                showErrorToast("something wrong")
+                ConnectionErrorFragment().show(
+                    childFragmentManager, ConnectionErrorFragment.TAG)
                 viewModel.isError.value = false
             }
         })
@@ -99,7 +102,8 @@ class SpreadsheetFragment : Fragment() {
         // show success message
         viewModel.isSuccess.observe(viewLifecycleOwner, Observer{
             if(it){
-                showErrorToast("Success!")
+                Toast.makeText(requireContext(), "Success!", Toast.LENGTH_SHORT).show()
+
                 viewModel.isSuccess.value = false
             }
         })
@@ -165,9 +169,6 @@ class SpreadsheetFragment : Fragment() {
         }
     }
 
-    private fun showErrorToast(msg:String){
-        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
-    }
 
     fun extractSpreadsheetIdFromUrl(url:String):String{
         val regex = Regex("""spreadsheets\/d\/([^\/]+)""")
