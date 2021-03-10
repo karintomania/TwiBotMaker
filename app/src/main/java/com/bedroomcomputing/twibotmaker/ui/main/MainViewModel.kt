@@ -67,6 +67,7 @@ class MainViewModel(val tweetDao: TweetDao, val userDao: UserDao, val workManage
             0 -> 1L
             1 -> 2L
             2 -> 3L
+            3 -> 6L
             else -> 1L
         }
         return spanHour
