@@ -11,23 +11,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/spreadsheet_caption"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
 
             <LinearLayout
                 android:id="@+id/spreadsheet_signinLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/textView_spreadsheetLoginCaption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/spreadsheet_loginCaption" />
 
                 <com.google.android.gms.common.SignInButton
                     android:id="@+id/button_signin"
@@ -36,30 +34,35 @@
                     android:layout_marginTop="40dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                </com.google.android.gms.common.SignInButton>
 
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/spreadsheet_mainLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:padding="16dp">
 
                 <TextView
-                    android:id="@+id/textView9"
+                    android:id="@+id/textView_spreadsheetUrl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
+                    android:text="@string/spreadsheet_urlTitle"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/textView_spreadsheetUrlCaption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="SpreadsheetのURLを入れてください"
+                    android:text="@string/spreadsheet_urlCaption"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView9" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView_spreadsheetUrl" />
 
                 <EditText
                     android:id="@+id/edit_url"
@@ -67,29 +70,31 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:ems="10"
-                    android:hint="Spreadsheet URL"
+                    android:hint="@string/spreadsheet_urlTitle"
                     android:inputType="textPersonName"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView_spreadsheetUrlCaption" />
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/textView_spreadsheetBackup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
-                    android:text="Backup"
+                    android:text="@string/spreadsheet_backupTitle"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/edit_url" />
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/textView_spreadsheetBackupCaption"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="Save backup of your tweet list to google spreadsheet"
+                    android:text="@string/spreadsheet_backupCaption"
                     app:layout_constraintEnd_toStartOf="@+id/button_backup"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView_spreadsheetBackup" />
 
                 <Button
                     android:id="@+id/button_backup"
@@ -98,29 +103,33 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
                     android:background="@drawable/button_rounded_red"
-                    android:text="Backup"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="4dp"
+                    android:text="@string/spreadsheet_backupButton"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView_spreadsheetBackup" />
 
 
                 <TextView
-                    android:id="@+id/textView8"
+                    android:id="@+id/textView_spreadsheetRestore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
-                    android:text="Restore Backup"
+                    android:text="@string/spreadsheet_restoreTitle"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView_spreadsheetBackupCaption" />
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/textView_spreadsheetRestoreCaption"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="Restore backup from Google Spreadsheet"
+                    android:text="@string/spreadsheet_restoreCaption"
                     app:layout_constraintEnd_toStartOf="@+id/button_restore"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView8" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView_spreadsheetRestore" />
 
                 <Button
                     android:id="@+id/button_restore"
@@ -128,25 +137,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="32dp"
                     android:background="@drawable/button_rounded_blue"
-                    android:text="Restore"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:text="@string/spreadsheet_restoreButton"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView8" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView_spreadsheetRestore" />
 
                 <Button
                     android:id="@+id/button_signout"
                     style="@style/button_stroke"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="48dp"
                     android:background="@drawable/button_stroke_blue"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
-                    android:text="Google signout"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView5" />
+                    android:text="@string/spreadsheet_signoutButton"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView_spreadsheetRestoreCaption" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

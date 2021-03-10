@@ -17,7 +17,23 @@
     <string name="main_tweetList">つぶやきリスト</string>
     <string name="main_tweetListCaption">リストの中のつぶやきを\nランダムにつぶやきます。</string>
     <string name="menu_logout">ログアウト</string>
-    <string name="menu_spreadsheet">Spreadsheet連携</string>
+    <string name="menu_spreadsheet">スプレッドシート連携</string>
+    <string name="spreadsheet_connectionSuccess">成功しました！</string>
+    <string name="spreadsheet_connectionError">スプレッドシートにアクセスできませんでした。
+                                                \n\n - インターネットに接続していますか？
+                                                \n\n - URLが間違っていませんか?
+                                                \n\n - Googleアカウントはスプレッドシートの編集権限を持っていますか？
+                                                \n\n - 復元にはスプレッドシートにTwitterのユーザ名(@以下)と同じ名前のシートが必要です\nバックアップを一度行うとそのシートが自動的に作成されます。</string>
+    <string name="spreadsheet_loginCaption">Googleスプレッドシートにつぶやきリストを同期できます。\nGoogleアカウントにサインインしてください</string>
+    <string name="spreadsheet_urlTitle">スプレッドシートのURL</string>
+    <string name="spreadsheet_urlCaption">データをバックアップしたいGoogleスプレッドシートのURLを入力してください</string>
+    <string name="spreadsheet_backupTitle">バックアップ</string>
+    <string name="spreadsheet_backupCaption">つぶやきリストをGoogleスプレッドシート上にバックアップします</string>
+    <string name="spreadsheet_restoreTitle">バックアップの復元</string>
+    <string name="spreadsheet_restoreCaption">Googleスプレッドシート上のバックアップを復元します</string>
+    <string name="spreadsheet_backupButton">バックアップ</string>
+    <string name="spreadsheet_restoreButton">復元</string>
+    <string name="spreadsheet_signoutButton">Googleからサインアウト</string>
     <string-array name="span_array">
         <item>1時間</item>
         <item>2時間</item>

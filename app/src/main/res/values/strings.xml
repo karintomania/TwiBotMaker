@@ -17,8 +17,22 @@
     <string name="main_tweetListCaption">TwiBotMaker will pick a random tweet from Tweet List and tweet it.</string>
     <string name="menu_logout">Logout</string>
     <string name="menu_spreadsheet">Spreadsheet</string>
-    <string name="spreadsheet_caption">You can sync the tweet list with Google Spreadsheet.</string>
-    <string name="spreadsheet_connectionError">Unable to connect Google Spreadsheet.\n - Check your internet connection\n - Make sure the URL is correct</string>
+    <string name="spreadsheet_connectionSuccess">Success!!</string>
+    <string name="spreadsheet_connectionError">Unable to connect to the specified Spreadsheet.
+                                                \n\n- Check your internet connection
+                                                \n\n - Make sure the URL is correct
+                                                \n\n - Your google account should have a permission to write/read the spreadsheet
+                                                \n\n - To restore, the name of the sheet should be the same as your BOT\'s twitter username (after @ symbol).\nThe Backup button make the sheet automatically.</string>
+    <string name="spreadsheet_loginCaption">Sync your tweet list with Google Spreadsheet!\nSignin with your Google Account.</string>
+    <string name="spreadsheet_urlTitle">Spreadsheet URL</string>
+    <string name="spreadsheet_urlCaption">Enter the URL of the Spreadsheet  you want to sync.</string>
+    <string name="spreadsheet_backupTitle">Backup</string>
+    <string name="spreadsheet_backupCaption">Backup your tweet list to google spreadsheet</string>
+    <string name="spreadsheet_restoreTitle">Restore</string>
+    <string name="spreadsheet_restoreCaption">Restore your backup from Google Spreadsheet</string>
+    <string name="spreadsheet_backupButton">Backup</string>
+    <string name="spreadsheet_restoreButton">Restore</string>
+    <string name="spreadsheet_signoutButton">Google Signout</string>
     <string-array name="span_array">
         <item>1 hour</item>
         <item>2 hours</item>
